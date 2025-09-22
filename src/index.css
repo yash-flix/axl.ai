@@ -8,65 +8,91 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Jarvis Futuristic Theme */
-    --background: 220 30% 5%;
-    --foreground: 210 40% 98%;
+    /* Minimal Theme - Light Mode */
+    --background: 40 25% 96%; /* #f8f3ea */
+    --foreground: 226 81% 19%; /* #0b1957 */
 
-    --card: 220 25% 8%;
-    --card-foreground: 210 40% 98%;
+    --card: 40 25% 96%;
+    --card-foreground: 226 81% 19%;
 
-    --popover: 220 25% 8%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 40 25% 96%;
+    --popover-foreground: 226 81% 19%;
 
-    --primary: 195 100% 50%;
-    --primary-foreground: 220 30% 5%;
+    --primary: 226 81% 19%; /* #0b1957 */
+    --primary-foreground: 40 25% 96%;
 
-    --secondary: 220 20% 15%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 33 26% 84%; /* #e6d8c7 */
+    --secondary-foreground: 226 81% 19%;
 
-    --muted: 220 20% 12%;
-    --muted-foreground: 215 25% 65%;
+    --muted: 33 26% 84%;
+    --muted-foreground: 226 50% 40%;
 
-    --accent: 280 100% 70%;
-    --accent-foreground: 220 30% 5%;
+    --accent: 33 26% 84%;
+    --accent-foreground: 226 81% 19%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 40 25% 96%;
 
-    --success: 120 100% 50%;
-    --success-foreground: 220 30% 5%;
+    --success: 120 100% 40%;
+    --success-foreground: 40 25% 96%;
 
-    --warning: 45 100% 60%;
-    --warning-foreground: 220 30% 5%;
+    --warning: 45 100% 50%;
+    --warning-foreground: 226 81% 19%;
 
-    --border: 220 20% 20%;
-    --input: 220 20% 15%;
-    --ring: 195 100% 50%;
+    --border: 33 26% 84%;
+    --input: 40 25% 96%;
+    --ring: 226 81% 19%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Jarvis-specific colors */
-    --jarvis-blue: 195 100% 50%;
-    --jarvis-cyan: 180 100% 60%;
-    --jarvis-purple: 280 100% 70%;
-    --jarvis-dark: 220 30% 8%;
-    --jarvis-darker: 220 35% 5%;
-    --jarvis-light: 210 40% 98%;
+    /* Custom colors */
+    --cream: 40 25% 96%; /* #f8f3ea */
+    --navy: 226 81% 19%; /* #0b1957 */
+    --beige: 33 26% 84%; /* #e6d8c7 */
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--jarvis-blue)), hsl(var(--jarvis-cyan)));
-    --gradient-secondary: linear-gradient(135deg, hsl(var(--jarvis-purple)), hsl(var(--jarvis-blue)));
-    --gradient-background: linear-gradient(135deg, hsl(var(--jarvis-darker)), hsl(var(--jarvis-dark)));
-    --gradient-card: linear-gradient(135deg, hsl(var(--card) / 0.8), hsl(var(--card) / 0.4));
+    --gradient-primary: linear-gradient(135deg, hsl(var(--navy)), hsl(var(--primary)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--beige)), hsl(var(--secondary)));
+    --gradient-background: linear-gradient(135deg, hsl(var(--cream)), hsl(var(--background)));
 
     /* Shadows */
-    --shadow-glow: 0 0 20px hsl(var(--jarvis-blue) / 0.3);
-    --shadow-glow-strong: 0 0 40px hsl(var(--jarvis-blue) / 0.5);
-    --shadow-purple: 0 0 20px hsl(var(--jarvis-purple) / 0.3);
+    --shadow-subtle: 0 1px 3px hsl(var(--navy) / 0.1);
+    --shadow-medium: 0 4px 6px hsl(var(--navy) / 0.1);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.2s ease-out;
+  }
+
+  .dark {
+    /* Minimal Theme - Dark Mode */
+    --background: 226 81% 19%; /* #0b1957 */
+    --foreground: 40 25% 96%; /* #f8f3ea */
+
+    --card: 226 81% 15%;
+    --card-foreground: 40 25% 96%;
+
+    --popover: 226 81% 15%;
+    --popover-foreground: 40 25% 96%;
+
+    --primary: 40 25% 96%; /* #f8f3ea */
+    --primary-foreground: 226 81% 19%;
+
+    --secondary: 33 26% 84%; /* #e6d8c7 */
+    --secondary-foreground: 226 81% 19%;
+
+    --muted: 226 50% 25%;
+    --muted-foreground: 40 20% 70%;
+
+    --accent: 33 26% 84%;
+    --accent-foreground: 226 81% 19%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 40 25% 96%;
+
+    --border: 226 50% 25%;
+    --input: 226 50% 20%;
+    --ring: 40 25% 96%;
   }
 }
 
