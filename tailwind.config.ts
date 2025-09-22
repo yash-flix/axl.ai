@@ -31,6 +31,14 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -46,6 +54,14 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        jarvis: {
+          blue: "hsl(var(--jarvis-blue))",
+          cyan: "hsl(var(--jarvis-cyan))",
+          purple: "hsl(var(--jarvis-purple))",
+          dark: "hsl(var(--jarvis-dark))",
+          darker: "hsl(var(--jarvis-darker))",
+          light: "hsl(var(--jarvis-light))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -80,10 +96,53 @@ export default {
             height: "0",
           },
         },
+        "pulse-glow": {
+          "0%, 100%": {
+            opacity: "1",
+            transform: "scale(1)",
+          },
+          "50%": {
+            opacity: "0.8",
+            transform: "scale(1.05)",
+          },
+        },
+        "wave": {
+          "0%": {
+            transform: "scaleY(0.5)",
+          },
+          "50%": {
+            transform: "scaleY(1)",
+          },
+          "100%": {
+            transform: "scaleY(0.5)",
+          },
+        },
+        "float": {
+          "0%, 100%": {
+            transform: "translateY(0px)",
+          },
+          "50%": {
+            transform: "translateY(-10px)",
+          },
+        },
+        "slide-in": {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(-20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "wave": "wave 1s ease-in-out infinite",
+        "float": "float 3s ease-in-out infinite",
+        "slide-in": "slide-in 0.5s ease-out",
       },
     },
   },
