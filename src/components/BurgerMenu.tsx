@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 import { SystemMonitor } from '@/components/SystemMonitor';
 import { ControlPanel } from '@/components/ControlPanel';
@@ -21,6 +21,8 @@ export const BurgerMenu: React.FC<BurgerMenuProps> = ({ currentMode, onModeChang
         </button>
       </SheetTrigger>
       <SheetContent side="left" className="w-80 bg-background border-border">
+        <SheetTitle className="sr-only">Control Panel</SheetTitle>
+        <SheetDescription className="sr-only">Access system controls, monitoring, and memory</SheetDescription>
         <div className="mt-8 space-y-6">
           <div>
             <h2 className="text-lg font-semibold text-foreground mb-4">Control Panel</h2>

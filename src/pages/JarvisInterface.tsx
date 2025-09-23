@@ -27,7 +27,7 @@ export default function JarvisInterface() {
   return (
     <div className="min-h-screen bg-background relative">
       {/* Background Prism */}
-      <div style={{ width: '100%', height: '100vh', position: 'absolute', top: 0, left: 0, zIndex: -1 }}>
+      <div style={{ width: '100%', height: '100vh', position: 'fixed', top: 0, left: 0, zIndex: 1 }}>
         <Prism
           animationType="rotate"
           timeScale={0.5}
@@ -48,7 +48,7 @@ export default function JarvisInterface() {
       <ThemeToggle />
       
       {/* Control Buttons */}
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 flex gap-4 z-40">
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 flex gap-4 z-50">
         {/* Mute/Unmute Button */}
         <button
           onClick={handleMuteToggle}
@@ -73,7 +73,7 @@ export default function JarvisInterface() {
       </div>
 
       {/* Main Content - Logo in Center */}
-      <main className="min-h-screen flex items-center justify-center">
+      <main className="min-h-screen flex items-center justify-center relative z-10">
         <div className="text-center">
           <img 
             src={axlLogo} 
