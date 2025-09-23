@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Mic, MicOff, Power } from 'lucide-react';
 import { BurgerMenu } from '@/components/BurgerMenu';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import Prism from '@/components/Prism';
 import axlLogo from '@/assets/axl-logo.png';
 
 export default function JarvisInterface() {
@@ -24,7 +25,22 @@ export default function JarvisInterface() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      {/* Background Prism */}
+      <div style={{ width: '100%', height: '100vh', position: 'absolute', top: 0, left: 0, zIndex: -1 }}>
+        <Prism
+          animationType="rotate"
+          timeScale={0.5}
+          height={3.5}
+          baseWidth={5.5}
+          scale={3.6}
+          hueShift={0}
+          colorFrequency={1}
+          noise={0.5}
+          glow={1}
+        />
+      </div>
+      
       {/* Burger Menu */}
       <BurgerMenu currentMode={currentMode} onModeChange={handleModeChange} />
       
