@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { Renderer, Camera, Transform, Geometry, Program, Mesh, Vec3 } from 'ogl';
+import React, { useRef, useEffect, useState } from 'react';
+import { Renderer, Camera, Transform, Geometry, Program, Mesh, Box } from 'ogl';
 
 interface PrismProps {
   animationType?: string;
@@ -25,121 +25,83 @@ const Prism: React.FC<PrismProps> = ({
   glow = 1
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const rendererRef = useRef<Renderer | null>(null);
-  const sceneRef = useRef<Transform | null>(null);
-  const meshRef = useRef<Mesh | null>(null);
-  const animationRef = useRef<number>();
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Create renderer
-    const renderer = new Renderer({
-      alpha: true,
-      antialias: true,
-    });
-    
-    const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 0);
-    
-    // Set size
-    const container = containerRef.current;
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-    renderer.setSize(width, height);
-    container.appendChild(gl.canvas);
+    let renderer: Renderer;
+    let animationId: number;
 
-    // Create camera
-    const camera = new Camera(gl, { fov: 45 });
-    camera.position.set(0, 0, 8);
+    try {
+      // Create renderer
+      renderer = new Renderer({
+        alpha: true,
+        antialias: true,
+        premultipliedAlpha: false,
+      });
+      
+      const gl = renderer.gl;
+      gl.clearColor(0, 0, 0, 0);
+      
+      // Set size
+      const container = containerRef.current;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      renderer.setSize(width, height);
+      container.appendChild(gl.canvas);
 
-    // Create scene
-    const scene = new Transform();
+      // Create camera
+      const camera = new Camera(gl, { fov: 45 });
+      camera.position.set(0, 0, 8);
 
-    // Create prism geometry
-    const geometry = new Geometry(gl, {
-      position: {
-        size: 3,
-        data: new Float32Array([
-          // Front face
-          -1, -1,  1,
-           1, -1,  1,
-           1,  1,  1,
-          -1,  1,  1,
-          // Back face
-          -1, -1, -1,
-          -1,  1, -1,
-           1,  1, -1,
-           1, -1, -1,
-          // Top face
-          -1,  1, -1,
-          -1,  1,  1,
-           1,  1,  1,
-           1,  1, -1,
-          // Bottom face
-          -1, -1, -1,
-           1, -1, -1,
-           1, -1,  1,
-          -1, -1,  1,
-          // Right face
-           1, -1, -1,
-           1,  1, -1,
-           1,  1,  1,
-           1, -1,  1,
-          // Left face
-          -1, -1, -1,
-          -1, -1,  1,
-          -1,  1,  1,
-          -1,  1, -1,
-        ])
-      },
-      index: {
-        data: new Uint16Array([
-          0,  1,  2,    0,  2,  3,    // front
-          4,  5,  6,    4,  6,  7,    // back
-          8,  9,  10,   8,  10, 11,   // top
-          12, 13, 14,   12, 14, 15,   // bottom
-          16, 17, 18,   16, 18, 19,   // right
-          20, 21, 22,   20, 22, 23,   // left
-        ])
-      },
-    });
+      // Create scene
+      const scene = new Transform();
 
-    // Create shader program
-    const program = new Program(gl, {
-      vertex: `
+      // Use Box geometry instead of custom geometry to avoid issues
+      const geometry = new Box(gl, {
+        width: 2,
+        height: 2,
+        depth: 2,
+      });
+
+      // Simplified shader program
+      const vertex = `
         attribute vec3 position;
+        attribute vec3 normal;
+        
         uniform mat4 modelViewMatrix;
         uniform mat4 projectionMatrix;
         uniform float time;
-        uniform float noise;
-        varying vec3 vPosition;
-        varying float vNoise;
         
-        float random(vec3 scale, float seed) {
-          return fract(sin(dot(gl_Position.xyz + seed, scale)) * 43758.5453 + seed);
-        }
+        varying vec3 vPosition;
+        varying vec3 vNormal;
         
         void main() {
           vPosition = position;
+          vNormal = normal;
+          
           vec3 pos = position;
+          // Simple rotation animation
+          float s = sin(time * 0.5);
+          float c = cos(time * 0.5);
+          pos.x = position.x * c - position.z * s;
+          pos.z = position.x * s + position.z * c;
           
-          // Add noise displacement
-          float n = random(pos, time) * noise;
-          pos += normalize(pos) * n * 0.1;
-          
-          vNoise = n;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
         }
-      `,
-      fragment: `
+      `;
+
+      const fragment = `
         precision mediump float;
+        
         uniform float time;
         uniform float hueShift;
         uniform float colorFrequency;
         uniform float glow;
+        
         varying vec3 vPosition;
-        varying float vNoise;
+        varying vec3 vNormal;
         
         vec3 hsv2rgb(vec3 c) {
           vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
@@ -149,7 +111,7 @@ const Prism: React.FC<PrismProps> = ({
         
         void main() {
           float h = (vPosition.x + vPosition.y + time * 0.1) * colorFrequency + hueShift;
-          float s = 0.8 + vNoise * 0.2;
+          float s = 0.8;
           float v = 0.9 + sin(time + vPosition.z) * 0.1;
           
           vec3 color = hsv2rgb(vec3(h, s, v));
@@ -158,76 +120,103 @@ const Prism: React.FC<PrismProps> = ({
           float glowFactor = 1.0 + glow * (sin(time) * 0.5 + 0.5);
           color *= glowFactor;
           
-          // Add transparency based on position
-          float alpha = 0.7 + sin(vPosition.y + time) * 0.3;
+          // Add transparency
+          float alpha = 0.6 + sin(vPosition.y + time) * 0.2;
           
           gl_FragColor = vec4(color, alpha);
         }
-      `,
-      uniforms: {
-        time: { value: 0 },
-        noise: { value: noise },
-        hueShift: { value: hueShift },
-        colorFrequency: { value: colorFrequency },
-        glow: { value: glow },
-      },
-      transparent: true,
-      cullFace: null,
-    });
+      `;
 
-    // Create mesh
-    const mesh = new Mesh(gl, { geometry, program });
-    mesh.scale.set(scale, scale * height / baseWidth, scale);
-    mesh.setParent(scene);
+      const program = new Program(gl, {
+        vertex,
+        fragment,
+        uniforms: {
+          time: { value: 0 },
+          hueShift: { value: hueShift },
+          colorFrequency: { value: colorFrequency },
+          glow: { value: glow },
+        },
+        transparent: true,
+        cullFace: gl.BACK,
+      });
 
-    // Store references
-    rendererRef.current = renderer;
-    sceneRef.current = scene;
-    meshRef.current = mesh;
+      // Create mesh
+      const mesh = new Mesh(gl, { geometry, program });
+      mesh.scale.set(scale, scale * height / baseWidth, scale);
+      mesh.setParent(scene);
 
-    // Animation loop
-    const animate = () => {
-      const time = performance.now() * 0.001 * timeScale;
-      
-      if (meshRef.current && meshRef.current.program) {
-        meshRef.current.program.uniforms.time.value = time;
-        
-        // Apply animation
-        if (animationType === "rotate") {
-          meshRef.current.rotation.x = time * 0.3;
-          meshRef.current.rotation.y = time * 0.5;
+      // Animation loop
+      const animate = () => {
+        try {
+          const time = performance.now() * 0.001 * timeScale;
+          
+          if (mesh.program && mesh.program.uniforms) {
+            mesh.program.uniforms.time.value = time;
+            
+            // Apply rotation animation
+            if (animationType === "rotate") {
+              mesh.rotation.x = time * 0.3;
+              mesh.rotation.y = time * 0.5;
+            }
+          }
+          
+          renderer.render({ scene, camera });
+          animationId = requestAnimationFrame(animate);
+        } catch (err) {
+          console.error('Animation error:', err);
+          setError(`Animation error: ${err}`);
         }
-      }
+      };
       
-      renderer.render({ scene, camera });
-      animationRef.current = requestAnimationFrame(animate);
-    };
-    
-    animate();
+      animate();
 
-    // Handle resize
-    const handleResize = () => {
-      if (!containerRef.current || !rendererRef.current) return;
+      // Handle resize
+      const handleResize = () => {
+        try {
+          if (!containerRef.current || !renderer) return;
+          
+          const width = containerRef.current.clientWidth;
+          const height = containerRef.current.clientHeight;
+          
+          renderer.setSize(width, height);
+          camera.perspective({ aspect: width / height });
+        } catch (err) {
+          console.error('Resize error:', err);
+        }
+      };
       
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
-      
-      rendererRef.current.setSize(width, height);
-      camera.perspective({ aspect: width / height });
-    };
-    
-    window.addEventListener('resize', handleResize);
+      window.addEventListener('resize', handleResize);
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+        if (containerRef.current && gl.canvas && containerRef.current.contains(gl.canvas)) {
+          containerRef.current.removeChild(gl.canvas);
+        }
+        // Clean up GL context
+        if (renderer && renderer.gl) {
+          const ext = renderer.gl.getExtension('WEBGL_lose_context');
+          if (ext) ext.loseContext();
+        }
+      };
+
+    } catch (err) {
+      console.error('Prism initialization error:', err);
+      setError(`Initialization error: ${err}`);
+      
+      // Clean up on error
+      if (renderer && animationId) {
+        cancelAnimationFrame(animationId);
       }
-      if (containerRef.current && gl.canvas) {
-        containerRef.current.removeChild(gl.canvas);
-      }
-    };
+    }
   }, [animationType, timeScale, height, baseWidth, scale, hueShift, colorFrequency, noise, glow]);
+
+  if (error) {
+    console.warn('Prism component error:', error);
+    return null; // Silently fail instead of showing error to user
+  }
 
   return (
     <div 
