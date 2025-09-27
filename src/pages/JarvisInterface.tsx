@@ -1,29 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import GradientBlinds from '@/components/GradientBlinds';
+import Orb from '@/components/Orb';
 import axlLogo from '@/assets/axl-logo.png';
 
 export default function JarvisInterface() {
 
   return (
     <div className="min-h-screen bg-background relative">
-      {/* Background GradientBlinds */}
+      {/* Background Orb */}
       <div style={{ width: '100%', height: '100vh', position: 'fixed', top: 0, left: 0, zIndex: 1 }}>
-        <GradientBlinds
-          className=""
-          dpr={undefined}
-          gradientColors={['#FF9FFC', '#5227FF']}
-          angle={0}
-          noise={0.3}
-          blindCount={12}
-          blindMinWidth={50}
-          spotlightRadius={0.5}
-          spotlightSoftness={1}
-          spotlightOpacity={1}
-          mouseDampening={0.15}
-          distortAmount={0}
-          shineDirection="left"
-          mixBlendMode="lighten"
+        <Orb
+          hoverIntensity={0.5}
+          rotateOnHover={true}
+          hue={0}
+          forceHoverState={false}
         />
       </div>
       
