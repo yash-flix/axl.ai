@@ -141,8 +141,8 @@ export default function AxlInterface() {
       {/* Main Content */}
       <main className="min-h-screen flex flex-col items-center justify-center relative z-10 p-8">
         <div className="text-center max-w-md w-full space-y-8">
-          {/* Logo with subtle animation */}
-          <div className="mb-8 animate-float">
+          {/* Logo */}
+          <div className="mb-8">
             <img 
               src={axlLogo} 
               alt="AXL.AI Logo" 
@@ -152,8 +152,7 @@ export default function AxlInterface() {
 
           {/* Title */}
           <div className="space-y-2">
-            <h1 className="text-4xl font-bold text-foreground">AXL.AI</h1>
-            <p className="text-lg text-muted-foreground">Advanced AI Assistant</p>
+            <p className="text-lg text-muted-foreground">Advanced Desktop Assistant</p>
           </div>
 
           {/* Start/Stop Button */}

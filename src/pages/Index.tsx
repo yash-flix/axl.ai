@@ -1,7 +1,7 @@
-import JarvisInterface from './JarvisInterface';
+import AxlInterface from './AxlInterface';
 
 const Index = () => {
-  return <JarvisInterface />;
+  return <AxlInterface />;
 };
 
 export default Index;
