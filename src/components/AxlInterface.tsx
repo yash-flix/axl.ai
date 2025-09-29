@@ -116,51 +116,45 @@ export default function AxlInterface() {
     }
   };
 
-  return (
+   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Background Orb */}
       <div className="absolute inset-0 z-0">
-        <Orb
-          hoverIntensity={0.3}
-          rotateOnHover={true}
-          hue={220}
-          forceHoverState={false}
-        />
+        <Orb hoverIntensity={0.3} rotateOnHover hue={220} forceHoverState={false} />
       </div>
-      
+
       {/* Theme Toggle */}
       <ThemeToggle />
 
-      {/* Voice Feedback Display */}
-      <VoiceFeedback 
+      {/* Voice Feedback */}
+      <VoiceFeedback
         message={feedbackMessage}
         isVisible={showFeedback}
         onHide={() => setShowFeedback(false)}
       />
 
       {/* Main Content */}
-      <main className="min-h-screen flex flex-col items-center justify-center relative z-10 p-8">
-        <div className="text-center max-w-md w-full space-y-8">
-          {/* Logo */}
-          <div className="mb-8">
-            <img 
-              src={axlLogo} 
-              alt="AXL.AI Logo" 
-              className="mx-auto max-w-xs h-auto filter drop-shadow-lg"
-            />
-          </div>
+      <main className="min-h-screen flex flex-col items-center justify-center relative z-10 p-2">
+        <div className="text-center max-w-md w-full">
+          {/* Logo + Title */}
+         <div className="flex flex-col items-center justify-center text-center">
+  <img
+    src={axlLogo}
+    alt="AXL.AI Logo"
+    className="h-auto w-full max-w-[230px] sm:max-w-[320px] md:max-w-[330px] lg:max-w-[350px] filter drop-shadow-lg mb-3"
+  />
+  <p className="text-lg text-muted-foreground mb-3">Advanced Desktop Assistant</p>
+</div>
 
-          {/* Title */}
-          <div className="space-y-2">
-            <p className="text-lg text-muted-foreground">Advanced Desktop Assistant</p>
-          </div>
 
           {/* Start/Stop Button */}
-          <StartStopButton
-            isRunning={isBackendRunning}
-            isLoading={isLoading}
-            onClick={handleStartStop}
-          />
+          <div className="mt-2  ">
+            <StartStopButton
+              isRunning={isBackendRunning}
+              isLoading={isLoading}
+              onClick={handleStartStop}
+            />
+          </div>
 
           {/* Command Input Panel */}
           <div className="space-y-4 pt-8">
