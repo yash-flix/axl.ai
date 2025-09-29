@@ -94,9 +94,9 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
       return vec4(colorIn.rgb / (a + 1e-5), a);
     }
 
-    const vec3 baseColor1 = vec3(0.2, 0.4, 0.898);
-    const vec3 baseColor2 = vec3(0.4, 0.2, 0.8);
-    const vec3 baseColor3 = vec3(0.102, 0.302, 0.702);
+      const vec3 baseColor1 = vec3(0.2, 0.4, 0.898);
+      const vec3 baseColor2 = vec3(0.4, 0.2, 0.8);
+      const vec3 baseColor3 = vec3(0.102, 0.302, 0.702);
     const float innerRadius = 0.6;
     const float noiseScale = 0.65;
 
@@ -108,9 +108,9 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
     }
 
     vec4 draw(vec2 uv) {
-      vec3 color1 = adjustHue(baseColor1, hue);
-      vec3 color2 = adjustHue(baseColor2, hue);
-      vec3 color3 = adjustHue(baseColor3, hue);
+     vec3 color1 = baseColor1;
+vec3 color2 = baseColor2;
+vec3 color3 = baseColor3;
       
       float ang = atan(uv.y, uv.x);
       float len = length(uv);
